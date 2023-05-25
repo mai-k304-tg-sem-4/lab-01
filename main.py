@@ -13,7 +13,7 @@ print(A.adjacency_matrix())
 print(A.adjacency_list(1))
 print(A.list_of_edges())
 print(A.list_of_edges(1))
-print(A.is_directed())
+#print(A.is_directed())
 
 
 nx.draw(A.graph, pos=nx.spring_layout(A.graph), with_labels=True, node_size=300, arrows=True)
