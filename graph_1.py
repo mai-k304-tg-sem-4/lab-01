@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-import pandas as pd
 
 class Graph:
     def __init__(self, file_path, file_type):
@@ -153,68 +152,85 @@ print('\n')
 
 g = Graph(file, key)
 
-adj_matrix = g.adjacency_matrix()
-np.set_printoptions(threshold=np.inf)
-np.set_printoptions(edgeitems=8, suppress=True)
+print('Введите ключ вывода')
+key = input()
+if key not in ['-o', '']:
+    print('Неверный тип ключа!')
+    sys.exit()
 
-degree_vec = g.degree_vector()
-print("deg =", degree_vec.astype(int), '\n')
+if (key != ''):
+    print("Введите название файла (в текщем каталоге):")
+    file = input()
+    # Запись результатов в файл
+    with open(file, 'w') as file:
+        adj_matrix = g.adjacency_matrix()
+        file.write("Adjacency matrix:\n")
+        for row in adj_matrix:
+            row_str = ' '.join(map(str, row))
+            file.write(row_str + '\n')
+        file.write('\n')
 
-dist_matrix = g.distance_matrix()
-print("Distances:")
-np.set_printoptions(threshold=dist_matrix.shape[0] // 2)
-print(dist_matrix.astype(int), '\n')
+        degree_vec = g.degree_vector()
+        file.write("deg =")
+        np.savetxt(file, degree_vec.astype(int), fmt='%d', delimiter=' ')
+        file.write("\n\n")
 
-adj_matrix = g.adjacency_matrix()
-eccentricities = g.eccentricity()
-print("Eccentricity:")
-print(eccentricities.astype(int), '\n')
+        dist_matrix = g.distance_matrix()
+        file.write("Distances:\n")
+        np.savetxt(file, dist_matrix.astype(int), fmt='%d', delimiter=' ')
+        file.write("\n")
 
-diameter = g.diameter()
-print("D =", int(diameter))
+        eccentricities = g.eccentricity()
+        file.write("Eccentricity:\n")
+        np.savetxt(file, eccentricities.astype(int).astype(str), fmt='%s', delimiter=' ')
+        file.write("\n")
 
-radius = g.radius()
-print("R =", int(radius))
+        diameter = g.diameter()
+        file.write("D = ")
+        file.write(str(int(diameter)))
+        file.write("\n")
 
-central_vertices = g.central_vertices()
-print("Z =", central_vertices.astype(int))
+        radius = g.radius()
+        file.write("R = ")
+        file.write(str(int(radius)))
+        file.write("\n")
 
-peripheral_vertices = g.peripheral_vertices()
-print("P =", peripheral_vertices.astype(int))
+        central_vertices = g.central_vertices()
+        file.write("Z = ")
+        np.savetxt(file, central_vertices.astype(int), fmt='%d', delimiter=' ')
+        file.write("\n")
 
-# Запись результатов в файл
-with open("output.txt", 'w') as file:
-    file.write("Adjacency matrix:\n")
-    for row in adj_matrix:
-        row_str = ' '.join(map(str, row))
-        file.write(row_str + '\n')
-    file.write('\n')
+        peripheral_vertices = g.peripheral_vertices()
+        file.write("P = ")
+        np.savetxt(file, peripheral_vertices.astype(int), fmt='%d', delimiter=' ')
 
-    file.write("deg =")
-    np.savetxt(file, degree_vec.astype(int), fmt='%d', delimiter=' ')
-    file.write("\n\n")
+    print("\nРезультаты записаны в файл " + file.name)
+else:
+    adj_matrix = g.adjacency_matrix()
+    np.set_printoptions(threshold=np.inf)
+    np.set_printoptions(edgeitems=8, suppress=True)
 
-    file.write("Distances:\n")
-    np.savetxt(file, dist_matrix.astype(int), fmt='%d', delimiter=' ')
-    file.write("\n")
+    degree_vec = g.degree_vector()
+    print("deg =", degree_vec.astype(int), '\n')
 
-    file.write("Eccentricity:\n")
-    np.savetxt(file, eccentricities.astype(int).astype(str), fmt='%s', delimiter=' ')
-    file.write("\n")
+    dist_matrix = g.distance_matrix()
+    print("Distances:")
+    np.set_printoptions(threshold=dist_matrix.shape[0] // 2)
+    print(dist_matrix.astype(int), '\n')
 
-    file.write("D = ")
-    file.write(str(int(diameter)))
-    file.write("\n")
+    adj_matrix = g.adjacency_matrix()
+    eccentricities = g.eccentricity()
+    print("Eccentricity:")
+    print(eccentricities.astype(int), '\n')
 
-    file.write("R = ")
-    file.write(str(int(radius)))
-    file.write("\n")
+    diameter = g.diameter()
+    print("D =", int(diameter))
 
-    file.write("Z = ")
-    np.savetxt(file, central_vertices.astype(int), fmt='%d', delimiter=' ')
-    file.write("\n")
+    radius = g.radius()
+    print("R =", int(radius))
 
-    file.write("P = ")
-    np.savetxt(file, peripheral_vertices.astype(int), fmt='%d', delimiter=' ')
+    central_vertices = g.central_vertices()
+    print("Z =", central_vertices.astype(int))
 
-print("\nРезультаты записаны в файл output.txt")
+    peripheral_vertices = g.peripheral_vertices()
+    print("P =", peripheral_vertices.astype(int))
